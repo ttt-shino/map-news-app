@@ -3,30 +3,6 @@ window.addEventListener("load", function () {
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 5,
     center: tokyoStation,
-    //夜モードmap
-    // styles: [
-    //   { elementType: "geometry", stylers: [{ color: "#212121" }] },
-    //   { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-    //   { elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
-    //   { elementType: "labels.text.stroke", stylers: [{ color: "#212121" }] },
-    //   { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#757575" }] },
-    //   { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#9e9e9e" }] },
-    //   { featureType: "administrative.land_parcel", stylers: [{ visibility: "off" }] },
-    //   { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#bdbdbd" }] },
-    //   { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
-    //   { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#181818" }] },
-    //   { featureType: "poi.park", elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
-    //   { featureType: "poi.park", elementType: "labels.text.stroke", stylers: [{ color: "#1b1b1b" }] },
-    //   { featureType: "road", elementType: "geometry.fill", stylers: [{ color: "#2c2c2c" }] },
-    //   { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#8a8a8a" }] },
-    //   { featureType: "road.arterial", elementType: "geometry", stylers: [{ color: "#373737" }] },
-    //   { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#3c3c3c" }] },
-    //   { featureType: "road.highway.controlled_access", elementType: "geometry", stylers: [{ color: "#4e4e4e" }] },
-    //   { featureType: "road.local", elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
-    //   { featureType: "transit", elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
-    //   { featureType: "water", elementType: "geometry", stylers: [{ color: "#000000" }] },
-    //   { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#3d3d3d" }] }
-    // ]
   });
 
   let locations = [];
@@ -55,24 +31,31 @@ window.addEventListener("load", function () {
 
       articles = allItems.map(item => {
         const text = `${item.title} ${item.description}`;
-        const match = locations.find(loc => {
-          const pattern = new RegExp(loc.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-          return pattern.test(text);
-        });
-
-        if (!match) {
-          console.log("❌ マッチしなかった記事:", item.title);
-        } else {
-          console.log("✅ マッチ:", item.title, "➡", match.name);
+        let earliestMatch = null;
+        let earliestIndex = Infinity;
+      
+        for (const loc of locations) {
+          const index = text.indexOf(loc.name);
+          if (index !== -1 && index < earliestIndex) {
+            earliestMatch = loc;
+            earliestIndex = index;
+          }
         }
-
-        return match && match.lat && match.lng ? {
-          title: item.title,
-          description: item.description,
-          url: item.link,
-          lat: match.lat,
-          lng: match.lng
-        } : null;
+      
+        if (!earliestMatch) {
+          console.log("❌ マッチしなかった記事:", item.title);
+          return null;
+        } else {
+          console.log("✅ マッチ:", item.title, "➡", earliestMatch.name);
+          return {
+            title: item.title,
+            description: item.description,
+            url: item.link,
+            location: earliestMatch.name,
+            lat: earliestMatch.lat,
+            lng: earliestMatch.lng
+          };
+        }
       }).filter(Boolean);
 
       articles = articles.sort(() => Math.random() - 0.5);
