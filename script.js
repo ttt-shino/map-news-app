@@ -87,13 +87,20 @@ window.addEventListener("load", function () {
     });
 
     currentInfoWindow = new google.maps.InfoWindow({
+      // content: `
+      //   <div style="max-width: 90vw; font-size: 16px; line-height: 1.5;">
+      //     <h3 style="font-size: 18px;">${article.title}</h3>
+      //     <p>${article.description.replace(/<img[^>]*>/g, "")}</p>
+      //     <p><a href="${article.url}" target="_blank" style="color: #2196F3;">記事を読む</a></p>
+      //   </div>
+      // `,
       content: `
-        <div style="max-width: 90vw; font-size: 16px; line-height: 1.5;">
-          <h3 style="font-size: 18px;">${article.title}</h3>
-          <p>${article.description.replace(/<img[^>]*>/g, "")}</p>
-          <p><a href="${article.url}" target="_blank" style="color: #2196F3;">記事を読む</a></p>
-        </div>
-      `,
+  <div style="max-width: 300px; padding: 8px 10px; font-size: 14px; line-height: 1.4;">
+    <h3 style="font-size: 15px; margin: 0 0 6px 0;">${article.title}</h3>
+    <p style="margin: 0 0 6px 0;">${article.description.replace(/<img[^>]*>/g, "")}</p>
+    <p style="margin: 0;"><a href="${article.url}" target="_blank" style="color: #2196F3; text-decoration: underline;">記事を読む</a></p>
+  </div>
+`,
     });
 
     currentInfoWindow.open(map, currentMarker);
