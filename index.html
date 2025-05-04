@@ -7,11 +7,17 @@
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
   <style>
-    html, body, #map {
+    html, body {
       height: 100%;
       margin: 0;
       padding: 0;
     }
+  
+    #map {
+      width: 100vw;  /* ← この行を追加 */
+      height: 100vh; /* ← この行を修正（または上書き） */
+    }
+  
     @media (max-width: 600px) {
       #map {
         height: 100vh;

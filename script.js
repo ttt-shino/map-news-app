@@ -87,10 +87,10 @@ window.addEventListener("load", function () {
 
     currentInfoWindow = new google.maps.InfoWindow({
       content: `
-        <div style="max-width: 250px; font-size: 14px; line-height: 1.4;">
-          <h3 style="font-size: 16px;">${article.title}</h3>
+        <div style="max-width: 90vw; font-size: 16px; line-height: 1.5;">
+          <h3 style="font-size: 18px;">${article.title}</h3>
           <p>${article.description.replace(/<img[^>]*>/g, "")}</p>
-          <p><a href="${article.url}" target="_blank">記事を読む</a></p>
+          <p><a href="${article.url}" target="_blank" style="color: #2196F3;">記事を読む</a></p>
         </div>
       `,
     });
